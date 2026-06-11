@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumina Blog — Design & Tecnologia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       VARIÁVEIS CSS — SISTEMA DE DESIGN
+    ═══════════════════════════════════════════════ */
+    :root {
+      --bg-void:        #07070E;
+      --bg-deep:        #0D0D1A;
+      --bg-card:        #111122;
+      --bg-card-hover:  #161630;
+
+      --primary:        #E8C547;
+      --primary-dim:    #C9A830;
+      --accent-violet:  #7C3AED;
+      --accent-sky:     #38BDF8;
+      --accent-rose:    #F472B6;
+
+      --text-bright:    #F0EEF8;
+      --text-body:      #A9A6C0;
+      --text-muted:     #5A5875;
+
+      --gradient-1: linear-gradient(135deg, #E8C547 0%, #F472B6 50%, #7C3AED 100%);
+      --gradient-2: linear-gradient(90deg, #38BDF8 0%, #7C3AED 100%);
+      --gradient-3: linear-gradient(180deg, #E8C547 0%, #C9A830 100%);
+      --gradient-radial: radial-gradient(ellipse at center, #7C3AED33 0%, transparent 70%);
+      --gradient-hero: linear-gradient(135deg, #0D0D1A 0%, #1A0A2E 50%, #0D1A2E 100%);
+      --gradient-card-border: linear-gradient(135deg, #E8C54740, #7C3AED40, #38BDF840);
+      --gradient-header: linear-gradient(180deg, #07070E 0%, #07070EDD 80%, transparent 100%);
+      --gradient-sidebar: radial-gradient(ellipse at top left, #7C3AED18 0%, transparent 60%);
+      --gradient-footer: linear-gradient(180deg, transparent 0%, #07070E 30%, #03030A 100%);
+      --gradient-btn: linear-gradient(135deg, #E8C547 0%, #F4A847 100%);
+      --gradient-btn-hover: linear-gradient(135deg, #F472B6 0%, #7C3AED 100%);
+      --gradient-text: linear-gradient(90deg, #E8C547, #F472B6, #38BDF8, #7C3AED);
+      --gradient-overlay: linear-gradient(180deg, transparent 20%, #07070ECC 70%, #07070E 100%);
+
+      --shadow-card:  0 4px 24px #00000066, 0 0 0 1px #FFFFFF08;
+      --shadow-glow:  0 0 40px #7C3AED33, 0 0 80px #7C3AED11;
+      --shadow-gold:  0 0 30px #E8C54733;
+
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    20px;
+      --radius-xl:    32px;
+
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body:    'Inter', sans-serif;
+
+      --nav-h:        72px;
+      --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-void);
+      color: var(--text-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { text-decoration: none; color: inherit; }
+    ul  { list-style: none; }
+
+    .container {
+      width: min(100%, 1200px);
+      margin-inline: auto;
+      padding-inline: clamp(1rem, 4vw, 2rem);
+    }
+
+    /* ═══════════════════════════════════════════════
+       UTILITÁRIOS
+    ═══════════════════════════════════════════════ */
+    .gradient-text {
+      background: var(--gradient-text);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 6s ease infinite;
+    }
+
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 99px;
+      background: var(--gradient-2);
+      color: #fff;
+    }
+
+    .tag--outline {
+      background: transparent;
+      border: 1px solid var(--text-muted);
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════════
+       HEADER
+       Gradiente: linear (topo → transparente)
+       Radial: glow atrás do logo
+    ═══════════════════════════════════════════════ */
+    .header {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: var(--gradient-header);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border-bottom: 1px solid #FFFFFF08;
+    }
+
+    .header__inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      position: relative;
+    }
+
+    .logo__mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--gradient-1);
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      position: relative;
+    }
+
+    .logo__mark::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 13px;
+      background: var(--gradient-1);
+      opacity: 0.3;
+      filter: blur(6px);
+      z-index: -1;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-body);
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav a::after {
+      content: '';
+      position: absolute;
+      inset-block-end: 2px;
+      inset-inline: 0.85rem;
+      height: 1px;
+      background: var(--gradient-2);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+
+    .nav a:hover { color: var(--text-bright); }
+    .nav a:hover::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.55rem 1.15rem;
+      border-radius: 99px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn--primary {
+      background: var(--gradient-btn);
+      color: #0A0A10;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn--primary:hover {
+      background: var(--gradient-btn-hover);
+      color: #fff;
+      box-shadow: 0 0 30px #7C3AED55;
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--text-body);
+      border: 1px solid #FFFFFF18;
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--accent-violet);
+      color: var(--text-bright);
+      background: #7C3AED18;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: var(--text-body);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+       Gradiente: radial (glow central) + linear (fundo)
+       Texto com background-clip: text animado
+    ═══════════════════════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      padding-block-start: var(--nav-h);
+      background: var(--gradient-hero);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Glow radial decorativo */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 800px 600px at 30% 50%, #7C3AED22 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 80% 20%, #38BDF815 0%, transparent 60%),
+        radial-gradient(ellipse 400px 400px at 70% 80%, #E8C54710 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Grade sutil */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(#FFFFFF04 1px, transparent 1px),
+        linear-gradient(90deg, #FFFFFF04 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    .hero__inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding-block: 6rem;
+    }
+
+    .hero__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-block-end: 1.5rem;
+    }
+
+    .hero__eyebrow-line {
+      width: 40px;
+      height: 2px;
+      background: var(--gradient-2);
+      border-radius: 2px;
+    }
+
+    .hero__eyebrow-text {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-sky);
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--text-bright);
+      margin-block-end: 1.5rem;
+    }
+
+    .hero__title em {
+      font-style: normal;
+      display: block;
+    }
+
+    .hero__desc {
+      font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+      color: var(--text-body);
+      max-width: 44ch;
+      margin-block-end: 2.5rem;
+      line-height: 1.75;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn--large { padding: 0.8rem 1.75rem; font-size: 0.9rem; }
+
+    .hero__stats {
+      display: flex;
+      gap: 2rem;
+      margin-block-start: 3rem;
+      padding-block-start: 2rem;
+      border-top: 1px solid #FFFFFF0C;
+    }
+
+    .stat__number {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: var(--gradient-3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat__label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-block-start: 0.25rem;
+    }
+
+    /* Card flutuante do hero */
+    .hero__visual {
+      position: relative;
+    }
+
+    .hero__card-stack {
+      position: relative;
+      max-width: 440px;
+      margin-inline-start: auto;
+    }
+
+    .hero__card-bg {
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(ellipse at 40% 40%, #7C3AED30 0%, transparent 70%);
+      filter: blur(30px);
+    }
+
+    .hero__featured-card {
+      position: relative;
+      z-index: 2;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      background: var(--bg-card);
+      border: 1px solid #FFFFFF0A;
+    }
+
+    .hero__card-img {
+      height: 240px;
+      background: linear-gradient(135deg, #1A0A2E 0%, #0D1A2E 40%, #0A1A1A 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero__card-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 40%, #7C3AED44 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, #38BDF830 0%, transparent 50%);
+    }
+
+    .hero__card-img-shape {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      opacity: 0.15;
+      filter: blur(40px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero__card-img-icon {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+    }
+
+    .hero__card-body {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .hero__card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 0.75rem;
+    }
+
+    .hero__card-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .hero__card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      line-height: 1.35;
+      margin-block-end: 0.5rem;
+    }
+
+    .hero__card-excerpt {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Mini cards decorativos */
+    .hero__mini-card {
+      position: absolute;
+      z-index: 3;
+      background: #1C1C35;
+      border: 1px solid #FFFFFF12;
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 32px #00000055;
+    }
+
+    .hero__mini-card--trend {
+      inset-block-end: -20px;
+      inset-inline-start: -30px;
+    }
+
+    .hero__mini-card--new {
+      inset-block-start: -15px;
+      inset-inline-end: -20px;
+    }
+
+    .mini-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .mini-dot--green  { background: #34D399; box-shadow: 0 0 8px #34D39966; }
+    .mini-dot--gold   { background: var(--primary); box-shadow: 0 0 8px #E8C54766; }
+
+    /* ═══════════════════════════════════════════════
+       SECTION COMMONS
+    ═══════════════════════════════════════════════ */
+    section { padding-block: 5rem; }
+
+    .section-header {
+      margin-block-end: 3rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-violet);
+      margin-block-end: 0.6rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin-block-start: 0.75rem;
+      font-size: 0.95rem;
+      max-width: 50ch;
+    }
+
+    /* ═══════════════════════════════════════════════
+       POSTS EM DESTAQUE
+       Gradiente: borda radial nos cards, overlay nos imgs
+    ═══════════════════════════════════════════════ */
+    .featured {
+      background: var(--bg-deep);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradiente radial de fundo da seção */
+    .featured::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 0% 0%, #7C3AED15 0%, transparent 60%),
+        radial-gradient(ellipse 500px 400px at 100% 100%, #38BDF810 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .featured__grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .fcard {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      position: relative;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    /* Borda com gradiente via ::before */
+    .fcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 1px;
+      background: var(--gradient-card-border);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.6;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+
+    .fcard:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card), 0 0 50px #7C3AED22;
+    }
+
+    .fcard:hover::before { opacity: 1; }
+
+    .fcard--main { grid-row: span 2; }
+
+    .fcard__img {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fcard--main .fcard__img { height: 320px; }
+    .fcard--sm   .fcard__img { height: 160px; }
+
+    /* Fundos de imagem com gradientes distintos */
+    .fcard__img-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.5s ease;
+    }
+
+    .fcard:hover .fcard__img-bg { transform: scale(1.04); }
+
+    .img-bg--1 {
+      background:
+        radial-gradient(ellipse 70% 70% at 30% 40%, #7C3AED55 0%, transparent 60%),
+        linear-gradient(135deg, #1A0530 0%, #0D1030 50%, #0A1520 100%);
+    }
+
+    .img-bg--2 {
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 30%, #38BDF845 0%, transparent 60%),
+        linear-gradient(135deg, #051A30 0%, #0A0D30 100%);
+    }
+
+    .img-bg--3 {
+      background:
+        radial-gradient(ellipse 60% 60% at 40% 60%, #E8C54730 0%, transparent 60%),
+        linear-gradient(135deg, #1A1505 0%, #1A0A05 100%);
+    }
+
+    .fcard__img-decor {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fcard__img-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      opacity: 0.12;
+      filter: blur(20px);
+    }
+
+    .fcard__img-icon {
+      position: absolute;
+      font-size: 2.5rem;
+      opacity: 0.9;
+    }
+
+    .fcard--main .fcard__img-icon { font-size: 3.5rem; }
+
+    /* Overlay gradiente na imagem */
+    .fcard__img-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-overlay);
+    }
+
+    .fcard__body { padding: 1.25rem 1.5rem 1.5rem; }
+    .fcard--main .fcard__body { padding: 1.5rem 2rem 2rem; }
+
+    .fcard__meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-block-end: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .fcard__date { font-size: 0.7rem; color: var(--text-muted); }
+
+    .fcard__title {
+      font-family: var(--font-display);
+      color: var(--text-bright);
+      line-height: 1.3;
+      margin-block-end: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .fcard--main .fcard__title { font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 700; }
+    .fcard--sm   .fcard__title { font-size: 0.95rem; font-weight: 600; }
+
+    .fcard:hover .fcard__title { color: var(--primary); }
+
+    .fcard__excerpt {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-block-end: 1.25rem;
+    }
+
+    .fcard__footer {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .author-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      display: grid;
+      place-items: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .author-name { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+    .read-time   { font-size: 0.7rem; color: var(--text-muted); margin-inline-start: auto; }
+
+    /* ═══════════════════════════════════════════════
+       MAIN CONTENT + SIDEBAR
+    ═══════════════════════════════════════════════ */
+    .content-area {
+      background: var(--bg-void);
+    }
+
+    .content-area__inner {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* ═══════════════════════════════════════════════
+       POSTS RECENTES — Grid
+       Gradiente: hover no card, borda sutil
+    ═══════════════════════════════════════════════ */
+    .recent-posts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .rcard {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid #FFFFFF08;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .rcard::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-card-border);
+      opacity: 0;
+      transition: var(--transition);
+      border-radius: var(--radius-md);
+      padding: 1px;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .rcard:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+      background: var(--bg-card-hover);
+    }
+
+    .rcard:hover::after { opacity: 1; }
+
+    .rcard__img {
+      height: 130px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rcard__img-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.5s ease;
+    }
+
+    .rcard:hover .rcard__img-bg { transform: scale(1.06); }
+
+    .img-bg--4 {
+      background: radial-gradient(ellipse at 50% 50%, #38BDF840 0%, transparent 60%),
+                  linear-gradient(135deg, #051020, #0A0520);
+    }
+
+    .img-bg--5 {
+      background: radial-gradient(ellipse at 60% 40%, #F472B640 0%, transparent 60%),
+                  linear-gradient(135deg, #200515, #0A0520);
+    }
+
+    .img-bg--6 {
+      background: radial-gradient(ellipse at 40% 60%, #E8C54730 0%, transparent 60%),
+                  linear-gradient(135deg, #201205, #100A05);
+    }
+
+    .img-bg--7 {
+      background: radial-gradient(ellipse at 50% 30%, #7C3AED40 0%, transparent 60%),
+                  linear-gradient(135deg, #15052A, #05100A);
+    }
+
+    .rcard__img-icon {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.75rem;
+    }
+
+    .rcard__body { padding: 1rem 1.1rem 1.1rem; }
+
+    .rcard__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 0.5rem;
+    }
+
+    .rcard__title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      line-height: 1.35;
+      margin-block-end: 0.4rem;
+      transition: var(--transition);
+    }
+
+    .rcard:hover .rcard__title { color: var(--accent-sky); }
+
+    .rcard__date { font-size: 0.65rem; color: var(--text-muted); }
+
+    .rcard__excerpt {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SIDEBAR
+       Gradiente: radial sutil no container, header dos widgets
+    ═══════════════════════════════════════════════ */
+    .sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .widget {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid #FFFFFF08;
+      overflow: hidden;
+      background-image: var(--gradient-sidebar);
+    }
+
+    .widget__header {
+      padding: 1rem 1.5rem;
+      /* Gradiente horizontal no header do widget */
+      background: linear-gradient(90deg, #7C3AED18 0%, transparent 80%);
+      border-bottom: 1px solid #FFFFFF08;
+    }
+
+    .widget__title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+    }
+
+    .widget__body { padding: 1.25rem 1.5rem; }
+
+    /* Widget: categorias */
+    .cat-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .cat-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .cat-item:hover {
+      background: #7C3AED18;
+      border-color: #7C3AED44;
+    }
+
+    .cat-item__name {
+      font-size: 0.825rem;
+      color: var(--text-body);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .cat-item:hover .cat-item__name { color: var(--text-bright); }
+
+    .cat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cat-item__count {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: #FFFFFF08;
+      padding: 0.1rem 0.45rem;
+      border-radius: 99px;
+    }
+
+    /* Widget: newsletter */
+    .newsletter-desc {
+      font-size: 0.8rem;
+      color: var(--text-body);
+      line-height: 1.6;
+      margin-block-end: 1rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .input {
+      background: #FFFFFF08;
+      border: 1px solid #FFFFFF12;
+      border-radius: var(--radius-sm);
+      padding: 0.65rem 0.9rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: var(--text-bright);
+      outline: none;
+      transition: var(--transition);
+      width: 100%;
+    }
+
+    .input::placeholder { color: var(--text-muted); }
+    .input:focus { border-color: var(--accent-violet); background: #7C3AED10; }
+
+    .btn--full { width: 100%; justify-content: center; }
+
+    /* Widget: autor */
+    .author-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.75rem;
+    }
+
+    .author-widget__avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+    }
+
+    .author-widget__avatar::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      opacity: 0.35;
+      filter: blur(8px);
+      z-index: -1;
+    }
+
+    .author-widget__name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+
+    .author-widget__role {
+      font-size: 0.75rem;
+      color: var(--accent-violet);
+      font-weight: 500;
+      margin-block-start: -0.4rem;
+    }
+
+    .author-widget__bio {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .author-widget__socials {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .social-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #FFFFFF08;
+      border: 1px solid #FFFFFF12;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .social-btn:hover {
+      background: var(--gradient-2);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    /* ═══════════════════════════════════════════════
+       BANNER CTA
+       Gradiente: linear diagonal exuberante
+    ═══════════════════════════════════════════════ */
+    .cta-banner {
+      padding-block: 3rem;
+    }
+
+    .cta-banner__inner {
+      border-radius: var(--radius-xl);
+      padding: clamp(2rem, 5vw, 4rem) clamp(2rem, 5vw, 5rem);
+      position: relative;
+      overflow: hidden;
+      /* Gradiente principal da seção */
+      background: linear-gradient(135deg, #1A0A2E 0%, #0D1A3E 40%, #0A1A2E 100%);
+    }
+
+    .cta-banner__inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 500px 400px at 20% 50%, #7C3AED35 0%, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 90% 20%, #38BDF825 0%, transparent 60%),
+        radial-gradient(ellipse 300px 300px at 80% 90%, #E8C54715 0%, transparent 60%);
+    }
+
+    .cta-banner__inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(#FFFFFF04 1px, transparent 1px),
+                        linear-gradient(90deg, #FFFFFF04 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .cta-banner__content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-banner__title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      line-height: 1.2;
+    }
+
+    .cta-banner__sub {
+      font-size: 0.9rem;
+      color: var(--text-body);
+      margin-block-start: 0.5rem;
+    }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+       Gradiente: linear de baixo
+    ═══════════════════════════════════════════════ */
+    .footer {
+      background: linear-gradient(180deg, var(--bg-deep) 0%, #03030A 100%);
+      border-top: 1px solid #FFFFFF08;
+      padding-block: 4rem 2rem;
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-block-end: 3rem;
+    }
+
+    .footer__brand-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-block: 1rem;
+      max-width: 28ch;
+    }
+
+    .footer__col-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      margin-block-end: 1.25rem;
+    }
+
+    .footer__links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer__links a {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .footer__links a:hover { color: var(--primary); }
+
+    .footer__bottom {
+      padding-block-start: 2rem;
+      border-top: 1px solid #FFFFFF08;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer__copy {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+    }
+
+    .footer__copy span {
+      background: var(--gradient-text);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 6s ease infinite;
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL ANIMATION
+    ═══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVIDADE — Mobile-first
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .hero__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero__visual { display: none; }
+      .featured__grid { grid-template-columns: 1fr; }
+      .fcard--main { grid-row: auto; }
+      .content-area__inner { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      section { padding-block: 3.5rem; }
+      .nav, .btn--primary.nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .recent-posts { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr; gap: 2rem; }
+      .cta-banner__content { flex-direction: column; }
+      .hero__stats { gap: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+
+        <a href="#" class="logo">
+          <div class="logo__mark">✦</div>
+          Lumina
+        </a>
+
+        <nav class="nav">
+          <a href="#">Início</a>
+          <a href="#">Design</a>
+          <a href="#">Tecnologia</a>
+          <a href="#">Tendências</a>
+          <a href="#">Sobre</a>
+        </nav>
+
+        <a href="#" class="btn btn--primary nav-cta">Assinar →</a>
+        <div class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__inner">
+
+        <div class="hero__content">
+          <div class="hero__eyebrow">
+            <div class="hero__eyebrow-line"></div>
+            <span class="hero__eyebrow-text">Publicação Digital — 2025</span>
+          </div>
+
+          <h1 class="hero__title">
+            Onde o Design
+            <em class="gradient-text">encontra o Futuro</em>
+          </h1>
+
+          <p class="hero__desc">
+            Exploramos a interseção entre estética e tecnologia — com análises profundas, tutoriais práticos e as tendências que estão reformulando o mundo digital.
+          </p>
+
+          <div class="hero__cta">
+            <a href="#" class="btn btn--primary btn--large">Explorar artigos →</a>
+            <a href="#" class="btn btn--ghost btn--large">▶ Assista ao reel</a>
+          </div>
+
+          <div class="hero__stats">
+            <div class="stat">
+              <div class="stat__number">128k</div>
+              <div class="stat__label">Leitores ativos</div>
+            </div>
+            <div class="stat">
+              <div class="stat__number">340+</div>
+              <div class="stat__label">Artigos publicados</div>
+            </div>
+            <div class="stat">
+              <div class="stat__number">4.9★</div>
+              <div class="stat__label">Avaliação média</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <div class="hero__card-stack">
+            <div class="hero__card-bg"></div>
+
+            <div class="hero__mini-card hero__mini-card--new">
+              <div class="mini-dot mini-dot--gold"></div>
+              Novo artigo publicado
+            </div>
+
+            <div class="hero__featured-card">
+              <div class="hero__card-img">
+                <div class="hero__card-img-shape"></div>
+                <div class="hero__card-img-icon">🎨</div>
+              </div>
+              <div class="hero__card-body">
+                <div class="hero__card-meta">
+                  <span class="tag">Design System</span>
+                  <span class="hero__card-date">12 Jun 2025</span>
+                </div>
+                <div class="hero__card-title">Como criar uma linguagem visual coerente em 2025</div>
+                <p class="hero__card-excerpt">Tokens, variáveis e o novo paradigma de design que está tomando o mercado de assalto.</p>
+              </div>
+            </div>
+
+            <div class="hero__mini-card hero__mini-card--trend">
+              <div class="mini-dot mini-dot--green"></div>
+              #1 em Tendências esta semana
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       POSTS EM DESTAQUE
+  ═══════════════════════════════════════════════ -->
+  <section class="featured">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">✦ Em destaque</p>
+        <h2 class="section-title">Os mais lidos da semana</h2>
+        <p class="section-desc">Conteúdos cuidadosamente selecionados pela nossa equipe editorial.</p>
+      </div>
+
+      <div class="featured__grid">
+
+        <!-- Card principal -->
+        <article class="fcard fcard--main reveal">
+          <div class="fcard__img">
+            <div class="fcard__img-bg img-bg--1"></div>
+            <div class="fcard__img-decor">
+              <div class="fcard__img-circle"></div>
+            </div>
+            <div class="fcard__img-icon">🚀</div>
+            <div class="fcard__img-overlay"></div>
+          </div>
+          <div class="fcard__body">
+            <div class="fcard__meta">
+              <span class="tag">Tecnologia</span>
+              <span class="fcard__date">10 Jun 2025 · 8 min</span>
+            </div>
+            <h3 class="fcard__title">
+              A revolução silenciosa das interfaces: como o design generativo está mudando tudo que conhecemos sobre UX
+            </h3>
+            <p class="fcard__excerpt">
+              Inteligência artificial não é mais uma camada sobre o produto — ela é o próprio produto. Entenda como as grandes empresas estão redesenhando seus sistemas de design para uma era onde o conteúdo é criado em tempo real.
+            </p>
+            <div class="fcard__footer">
+              <div class="author-avatar">MR</div>
+              <span class="author-name">Marina Rocha</span>
+              <span class="read-time">8 min de leitura</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card pequeno 1 -->
+        <article class="fcard fcard--sm reveal">
+          <div class="fcard__img">
+            <div class="fcard__img-bg img-bg--2"></div>
+            <div class="fcard__img-icon">⚡</div>
+            <div class="fcard__img-overlay"></div>
+          </div>
+          <div class="fcard__body">
+            <div class="fcard__meta">
+              <span class="tag">CSS</span>
+              <span class="fcard__date">9 Jun · 5 min</span>
+            </div>
+            <h3 class="fcard__title">Dominando CSS Container Queries em projetos reais</h3>
+            <div class="fcard__footer">
+              <div class="author-avatar">PT</div>
+              <span class="author-name">Pedro Tavares</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card pequeno 2 -->
+        <article class="fcard fcard--sm reveal">
+          <div class="fcard__img">
+            <div class="fcard__img-bg img-bg--3"></div>
+            <div class="fcard__img-icon">🎯</div>
+            <div class="fcard__img-overlay"></div>
+          </div>
+          <div class="fcard__body">
+            <div class="fcard__meta">
+              <span class="tag">Branding</span>
+              <span class="fcard__date">8 Jun · 6 min</span>
+            </div>
+            <h3 class="fcard__title">Identidade visual para startups: o que funciona (e o que não funciona)</h3>
+            <div class="fcard__footer">
+              <div class="author-avatar">AL</div>
+              <span class="author-name">Ana Lima</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CONTEÚDO PRINCIPAL + SIDEBAR
+  ═══════════════════════════════════════════════ -->
+  <section class="content-area">
+    <div class="container">
+      <div class="content-area__inner">
+
+        <!-- Posts recentes -->
+        <div>
+          <div class="section-header reveal">
+            <p class="section-eyebrow">✦ Recentes</p>
+            <h2 class="section-title">Últimas publicações</h2>
+          </div>
+
+          <div class="recent-posts">
+
+            <article class="rcard reveal">
+              <div class="rcard__img">
+                <div class="rcard__img-bg img-bg--4"></div>
+                <div class="rcard__img-icon">🌊</div>
+              </div>
+              <div class="rcard__body">
+                <div class="rcard__meta">
+                  <span class="tag">Motion</span>
+                  <span class="rcard__date">7 Jun 2025</span>
+                </div>
+                <h3 class="rcard__title">Animações que não incomodam: princípios do motion design acessível</h3>
+                <p class="rcard__excerpt">Como criar transições que encantam sem sobrecarregar usuários com sensibilidade ao movimento.</p>
+              </div>
+            </article>
+
+            <article class="rcard reveal">
+              <div class="rcard__img">
+                <div class="rcard__img-bg img-bg--5"></div>
+                <div class="rcard__img-icon">🔮</div>
+              </div>
+              <div class="rcard__body">
+                <div class="rcard__meta">
+                  <span class="tag">Futuro</span>
+                  <span class="rcard__date">6 Jun 2025</span>
+                </div>
+                <h3 class="rcard__title">Spatial computing: preparando seus projetos para a próxima plataforma</h3>
+                <p class="rcard__excerpt">Vision Pro, Android XR e o que os designers precisam aprender agora para não ficar para trás.</p>
+              </div>
+            </article>
+
+            <article class="rcard reveal">
+              <div class="rcard__img">
+                <div class="rcard__img-bg img-bg--6"></div>
+                <div class="rcard__img-icon">🛠️</div>
+              </div>
+              <div class="rcard__body">
+                <div class="rcard__meta">
+                  <span class="tag">Ferramentas</span>
+                  <span class="rcard__date">5 Jun 2025</span>
+                </div>
+                <h3 class="rcard__title">Figma vs Penpot em 2025: o que mudou e qual escolher?</h3>
+                <p class="rcard__excerpt">Comparativo honesto entre as duas plataformas mais usadas no mercado de design de interfaces.</p>
+              </div>
+            </article>
+
+            <article class="rcard reveal">
+              <div class="rcard__img">
+                <div class="rcard__img-bg img-bg--7"></div>
+                <div class="rcard__img-icon">💡</div>
+              </div>
+              <div class="rcard__body">
+                <div class="rcard__meta">
+                  <span class="tag">Produtividade</span>
+                  <span class="rcard__date">4 Jun 2025</span>
+                </div>
+                <h3 class="rcard__title">O fluxo do designer moderno: ferramentas de IA que realmente entregam</h3>
+                <p class="rcard__excerpt">Testamos 12 ferramentas de IA durante 30 dias. Estas 4 ficaram no nosso workflow permanentemente.</p>
+              </div>
+            </article>
+
+          </div>
+
+          <div style="margin-block-start: 2rem; text-align: center;">
+            <a href="#" class="btn btn--ghost btn--large">Ver todos os artigos →</a>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+          <!-- Widget Categorias -->
+          <div class="widget reveal">
+            <div class="widget__header">
+              <h3 class="widget__title">Categorias</h3>
+            </div>
+            <div class="widget__body">
+              <ul class="cat-list">
+                <li class="cat-item">
+                  <span class="cat-item__name">
+                    <span class="cat-dot" style="background:#38BDF8"></span>
+                    Design System
+                  </span>
+                  <span class="cat-item__count">42</span>
+                </li>
+                <li class="cat-item">
+                  <span class="cat-item__name">
+                    <span class="cat-dot" style="background:#7C3AED"></span>
+                    CSS Avançado
+                  </span>
+                  <span class="cat-item__count">38</span>
+                </li>
+                <li class="cat-item">
+                  <span class="cat-item__name">
+                    <span class="cat-dot" style="background:#E8C547"></span>
+                    Branding
+                  </span>
+                  <span class="cat-item__count">27</span>
+                </li>
+                <li class="cat-item">
+                  <span class="cat-item__name">
+                    <span class="cat-dot" style="background:#F472B6"></span>
+                    Motion Design
+                  </span>
+                  <span class="cat-item__count">19</span>
+                </li>
+                <li class="cat-item">
+                  <span class="cat-item__name">
+                    <span class="cat-dot" style="background:#34D399"></span>
+                    Acessibilidade
+                  </span>
+                  <span class="cat-item__count">14</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Widget Newsletter -->
+          <div class="widget reveal">
+            <div class="widget__header">
+              <h3 class="widget__title">Newsletter</h3>
+            </div>
+            <div class="widget__body">
+              <p class="newsletter-desc">
+                Receba os melhores artigos sobre design e tecnologia toda semana, direto no seu e-mail. Sem spam.
+              </p>
+              <div class="newsletter-form">
+                <input class="input" type="email" placeholder="seu@email.com" />
+                <button class="btn btn--primary btn--full">Quero receber ✦</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget Autor -->
+          <div class="widget reveal">
+            <div class="widget__header">
+              <h3 class="widget__title">Autora em destaque</h3>
+            </div>
+            <div class="widget__body">
+              <div class="author-widget">
+                <div class="author-widget__avatar">MR</div>
+                <div>
+                  <div class="author-widget__name">Marina Rocha</div>
+                  <div class="author-widget__role">Design Lead & Escritora</div>
+                </div>
+                <p class="author-widget__bio">
+                  Explorando a fronteira entre design e tecnologia há 8 anos. Contribuidora do CSS-Tricks e palestrante no Front in Floripa.
+                </p>
+                <div class="author-widget__socials">
+                  <div class="social-btn">𝕏</div>
+                  <div class="social-btn">in</div>
+                  <div class="social-btn">gh</div>
+                </div>
+                <a href="#" class="btn btn--ghost" style="font-size: 0.78rem; padding: 0.45rem 1rem;">Ver perfil completo</a>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BANNER CTA
+  ═══════════════════════════════════════════════ -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-banner__inner reveal">
+        <div class="cta-banner__content">
+          <div>
+            <h2 class="cta-banner__title">
+              Pronto para elevar<br>
+              <span class="gradient-text">seu conhecimento?</span>
+            </h2>
+            <p class="cta-banner__sub">Mais de 128 mil designers e devs já fazem parte da comunidade Lumina.</p>
+          </div>
+          <div style="display:flex; gap: 0.75rem; flex-wrap:wrap; flex-shrink:0;">
+            <a href="#" class="btn btn--primary btn--large">Começar agora →</a>
+            <a href="#" class="btn btn--ghost btn--large">Saiba mais</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+
+        <div>
+          <a href="#" class="logo" style="display:inline-flex; margin-block-end: 0.5rem;">
+            <div class="logo__mark">✦</div>
+            Lumina
+          </a>
+          <p class="footer__brand-desc">
+            Uma publicação independente sobre design, tecnologia e cultura digital. Feita com ❤️ e CSS avançado.
+          </p>
+          <div style="display:flex; gap: 0.5rem; margin-block-start: 0.5rem;">
+            <div class="social-btn">𝕏</div>
+            <div class="social-btn">in</div>
+            <div class="social-btn">ig</div>
+            <div class="social-btn">yt</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Publicação</h4>
+          <ul class="footer__links">
+            <li><a href="#">Artigos recentes</a></li>
+            <li><a href="#">Em destaque</a></li>
+            <li><a href="#">Categorias</a></li>
+            <li><a href="#">Newsletter</a></li>
+            <li><a href="#">Arquivo</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Empresa</h4>
+          <ul class="footer__links">
+            <li><a href="#">Sobre nós</a></li>
+            <li><a href="#">Nossa equipe</a></li>
+            <li><a href="#">Escreva para nós</a></li>
+            <li><a href="#">Anuncie</a></li>
+            <li><a href="#">Contato</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Legal</h4>
+          <ul class="footer__links">
+            <li><a href="#">Termos de uso</a></li>
+            <li><a href="#">Privacidade</a></li>
+            <li><a href="#">Cookies</a></li>
+            <li><a href="#">Acessibilidade</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy">
+          © 2025 <span>Lumina</span> — Todos os direitos reservados.
+        </p>
+        <p class="footer__copy">
+          Feito com CSS puro, amor e <span>gradientes</span>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Stagger entre irmãos
+          const siblings = [...entry.target.parentElement.children].filter(el => el.classList.contains('reveal'));
+          const idx = siblings.indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, idx * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
